@@ -1,9 +1,3 @@
-Questions 1:
-	SNS notification coming continuously, arn:aws:sns:eu-west-2:021908831235:aws-earth-mo-atmospheric-mogreps-uk-prd
-Question 2:
-
-
-
 
 command-runner.jar,spark-submit,--deploy-mode,cluster,s3://pk-big-data-assessment/python/wordcount.py,s3://pk-big-data-assessment/data-in/sample.txt,s3://pk-big-data-assessment/data-out
 
@@ -38,54 +32,54 @@ export CONDAENV=my-iris-env
 
 -- Works only if you activate the env 
 PYSPARK_DRIVER_PYTHON=`which python` \
-                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
+                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
                  --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python \
                  --archives "./${CONDAENV}.zip#${CONDAENV}_zip" 
                  
                  
 
 PYSPARK_DRIVER_PYTHON=`which python` \
-                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
                  --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python \
-                 --archives "./${CONDAENV}.zip#${CONDAENV}_zip"  /Users/a078201/miniconda3/envs/test_venv.py
+                 --archives "./${CONDAENV}.zip#${CONDAENV}_zip"  /Users/miniconda3/envs/test_venv.py
 
 
 PYSPARK_DRIVER_PYTHON=`which python` \
-                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
                  --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python \
-                 --archives "/Users/a078201/Desktop/{CONDAENV}.zip#${CONDAENV}_zip"  /Users/a078201/miniconda3/envs/test_venv.py
+                 --archives "/Users/Desktop/{CONDAENV}.zip#${CONDAENV}_zip"  /Users/miniconda3/envs/test_venv.py
                  
                  
           
                  
                  
-                 PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
+                 PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
                   --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python \
                   --master local[4] \
                   --archives my-iris-env.zip#MYGLOBALENV
                   
-PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit\
+PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit\
                   --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python \
                   --master local[4] \
                   --archives my-iris-env.zip#MYGLOBALENV\
-                  /Users/a078201/Downloads/iris_cube_analysis.py /Users/a078201/Documents/prods_op_mogreps-uk_20160717_09_12_006.nc /tmp/results/
+                  /Users/Downloads/iris_cube_analysis.py /Users/Documents/prods_op_mogreps-uk_20160717_09_12_006.nc /tmp/results/
 
 
 -- Works from any location
-PYSPARK_DRIVER_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python \
-                 PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
-                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python --master local[4]
+PYSPARK_DRIVER_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python \
+                 PYSPARK_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python --master local[4]
                  
-PYSPARK_DRIVER_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python \
-                 PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
-                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python --master local[4]\
-                  /Users/a078201/Documents/iris_cube_analysis.py
+PYSPARK_DRIVER_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python \
+                 PYSPARK_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python --master local[4]\
+                  /Users/Documents/iris_cube_analysis.py
 
 
-PYSPARK_DRIVER_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python \
-                 PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
-                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python --master local[4] \
-                  /Users/a078201/Desktop/iris_cube_analysis.py /Users/a078201/Documents/prods_op_mogreps-uk_20160717_09_12_006.nc /tmp/results/
+PYSPARK_DRIVER_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python \
+                 PYSPARK_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python /Users/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/miniconda3/envs/my-iris-env/bin/python --master local[4] \
+                  /Users/Desktop/iris_cube_analysis.py /Users/Documents/prods_op_mogreps-uk_20160717_09_12_006.nc /tmp/results/
 
 
 
