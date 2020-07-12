@@ -1,0 +1,98 @@
+Questions 1:
+	SNS notification coming continuously, arn:aws:sns:eu-west-2:021908831235:aws-earth-mo-atmospheric-mogreps-uk-prd
+Question 2:
+
+
+
+
+command-runner.jar,spark-submit,--deploy-mode,cluster,s3://pk-big-data-assessment/python/wordcount.py,s3://pk-big-data-assessment/data-in/sample.txt,s3://pk-big-data-assessment/data-out
+
+aws emr create-cluster --auto-scaling-role EMR_AutoScaling_DefaultRole --applications Name=Hadoop Name=Spark --ebs-root-volume-size 10 --ec2-attributes '{"InstanceProfile":"EMR_EC2_DefaultRole","SubnetId":"subnet-5ba1c13c","EmrManagedSlaveSecurityGroup":"sg-0fafc01f5ea3e192f","EmrManagedMasterSecurityGroup":"sg-0bf4f146d7e1ef89f"}' --service-role EMR_DefaultRole --enable-debugging --release-label emr-5.29.0 --log-uri 's3n://pk-big-data-assessment/' --steps '[{"Args":["spark-submit","--deploy-mode","cluster","s3://pk-big-data-assessment/python/wordcount.py","s3://pk-big-data-assessment/data-in/sample.txt","s3://pk-big-data-assessment/data-out"],"Type":"CUSTOM_JAR","ActionOnFailure":"CONTINUE","Jar":"command-runner.jar","Properties":"","Name":"Spark application"}]' --name 'Spark - ETL' --instance-groups '[{"InstanceCount":1,"EbsConfiguration":{"EbsBlockDeviceConfigs":[{"VolumeSpecification":{"SizeInGB":32,"VolumeType":"gp2"},"VolumesPerInstance":2}]},"InstanceGroupType":"MASTER","InstanceType":"m5.xlarge","Name":"Master - 1"},{"InstanceCount":1,"EbsConfiguration":{"EbsBlockDeviceConfigs":[{"VolumeSpecification":{"SizeInGB":32,"VolumeType":"gp2"},"VolumesPerInstance":2}]},"InstanceGroupType":"CORE","InstanceType":"m5.xlarge","Name":"Core - 2"}]' --scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region us-east-1
+
+
+
+
+command-runner.jar,spark-submit,--deploy-mode,cluster,s3://pk-big-data-assessment/python/wordcount.py,s3://pk-big-data-assessment/data-in/sample.txt,s3://pk-big-data-assessment/data-out
+
+
+aws datapipeline activate-pipeline --parameter-values my_s3_input="s3://pk-big-data-assessment/data-in/sample.txt" my_s3_out="s3://pk-big-data-assessment/data-out" --pipeline-id df-00609363GLEZR67OUA7Y --profile aws-personal 
+
+
+
+aws datapipeline activate-pipeline --parameter-values my_python_script="s3://pk-big-data-assessment/python/wordcount.py" my_s3_input="s3://pk-big-data-assessment/data-in/sample.txt" my_s3_out="s3://pk-big-data-assessment/data-out" --pipeline-id df-04183799RYL2E872369 --profile aws-personal 
+
+
+
+my_python_script="s3://pk-big-data-assessment/python/wordcount.py" my_s3_input="s3://pk-big-data-assessment/data-in/sample.txt" my_s3_out="s3://pk-big-data-assessment/data-out"
+
+
+
+
+
+
+-- Custom Environment for Spark 
+------------------------------
+
+export CONDAENV=my-iris-env
+
+
+-- Works only if you activate the env 
+PYSPARK_DRIVER_PYTHON=`which python` \
+                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python \
+                 --archives "./${CONDAENV}.zip#${CONDAENV}_zip" 
+                 
+                 
+
+PYSPARK_DRIVER_PYTHON=`which python` \
+                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python \
+                 --archives "./${CONDAENV}.zip#${CONDAENV}_zip"  /Users/a078201/miniconda3/envs/test_venv.py
+
+
+PYSPARK_DRIVER_PYTHON=`which python` \
+                 PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./${CONDAENV}_zip/${CONDAENV}/bin/python \
+                 --archives "/Users/a078201/Desktop/{CONDAENV}.zip#${CONDAENV}_zip"  /Users/a078201/miniconda3/envs/test_venv.py
+                 
+                 
+          
+                 
+                 
+                 PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
+                  --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python \
+                  --master local[4] \
+                  --archives my-iris-env.zip#MYGLOBALENV
+                  
+PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit\
+                  --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./MYGLOBALENV/my-iris-env/bin/python \
+                  --master local[4] \
+                  --archives my-iris-env.zip#MYGLOBALENV\
+                  /Users/a078201/Downloads/iris_cube_analysis.py /Users/a078201/Documents/prods_op_mogreps-uk_20160717_09_12_006.nc /tmp/results/
+
+
+-- Works from any location
+PYSPARK_DRIVER_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python \
+                 PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/pyspark \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python --master local[4]
+                 
+PYSPARK_DRIVER_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python \
+                 PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python --master local[4]\
+                  /Users/a078201/Documents/iris_cube_analysis.py
+
+
+PYSPARK_DRIVER_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python \
+                 PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python /Users/a078201/Documents/personal/spark-2.4.5-bin-hadoop2.7/bin/spark-submit \
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=/Users/a078201/miniconda3/envs/my-iris-env/bin/python --master local[4] \
+                  /Users/a078201/Desktop/iris_cube_analysis.py /Users/a078201/Documents/prods_op_mogreps-uk_20160717_09_12_006.nc /tmp/results/
+
+
+
+Datapipeline -
+
+with emr_bootstrap.sh
+ command-runner.jar,spark-submit,--deploy-mode,client,--master,yarn,--conf,spark.yarn.appMasterEnv.PYSPARK_PYTHON=/home/hadoop/my-iris-env/bin/python,--conf,spark.executorEnv.PYSPARK_PYTHON=/home/hadoop/my-iris-env/bin/python,--conf,spark.pyspark.python=/home/hadoop/my-iris-env/bin/python,--num-executors,64 --conf,spark.executor.memory=4g#{my_python_script},#{my_s3_input},#{my_s3_out}
+  
+with emr_conda_setup.sh
+command-runner.jar,spark-submit,--deploy-mode,client,--master,yarn,--conf,spark.yarn.appMasterEnv.PYSPARK_PYTHON=/mnt1/anaconda3/bin/python,--conf,spark.executorEnv.PYSPARK_PYTHON=/mnt1/anaconda3/bin/python,--conf,spark.pyspark.python=/mnt1/anaconda3/bin/python,--num-executors,64 --conf,spark.executor.memory=4g#{my_python_script},#{my_s3_input},#{my_s3_out}                

@@ -1,0 +1,63 @@
+{
+	"objects": [{
+			"name": "Spark - ETL Activity",
+			"id": "EmrClusterId_4eDgd",
+			"releaseLabel": "emr-5.29.0",
+			"type": "EmrCluster",
+			"terminateAfter": "15 Minutes",
+			"applications": "Spark"
+		},
+		{
+			"name": "PySpark EMR WORD Count",
+			"step": "command-runner.jar,spark-submit,--deploy-mode,cluster,#{my_python_script},#{my_s3_input},#{my_s3_out}",
+			"id": "EmrActivityId_bymDF",
+			"runsOn": {
+				"ref": "EmrClusterId_4eDgd"
+			},
+			"type": "EmrActivity",
+			"onSuccess": {
+				"ref": "ActionId_gQQYD"
+			}
+		},
+		{
+			"role": "DataPipelineDefaultRole",
+			"subject": "EMR Status",
+			"name": "Spark Job notice",
+			"id": "ActionId_gQQYD",
+			"message": "Spark EMR is Complete",
+			"type": "SnsAlarm",
+			"topicArn": "arn:aws:sns:us-east-1:775703772184:Spark-EMR-Status"
+		},
+		{
+			"failureAndRerunMode": "CASCADE",
+			"resourceRole": "DataPipelineDefaultResourceRole",
+			"role": "DataPipelineDefaultRole",
+			"pipelineLogUri": "s3://pk-big-data-assessment/",
+			"scheduleType": "ONDEMAND",
+			"name": "Default",
+			"id": "Default"
+		}
+	],
+	"parameters": [{
+			"id": "my_s3_input",
+			"default": "s3://pk-big-data-assessment/data-in/sample.txt",
+			"description": "Data Inputlocation",
+			"type": "String"
+		},
+		{
+			"id": "my_s3_out",
+			"description": "Save Data to",
+			"type": "String"
+		},
+		{
+			"id": "my_python_script",
+			"description": "Python_script_location",
+			"type": "String"
+		}
+	],
+	"values": {
+		"my_s3_input": "s3:\/\/pk-big-data-assessment\/data-in\/sample.txt",
+		"my_s3_out": "s3:\/\/pk-big-data-assessment\/data-out",
+		"my_python_script":"s3://pk-big-data-assessment/python/wordcount.py"
+	}
+}

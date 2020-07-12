@@ -1,0 +1,83 @@
+{
+  "objects": [
+    {
+      "role": "DataPipelineDefaultRole",
+      "subject": "EMR Status",
+      "name": "Spark job notice",
+      "id": "ActionId_HUPzH",
+      "message": "Spark EMR is failed",
+      "type": "SnsAlarm",
+      "topicArn": "arn:aws:sns:us-east-1:775703772184:Spark-EMR-Status"
+    },
+    {
+      "onFail": {
+        "ref": "ActionId_HUPzH"
+      },
+      "name": "Weather Data Analysis",
+      "step": "command-runner.jar,spark-submit,--deploy-mode,client,--master,yarn,--conf,spark.yarn.appMasterEnv.PYSPARK_PYTHON=/mnt1/anaconda3/bin/python,--conf,spark.executorEnv.PYSPARK_PYTHON=/mnt1/anaconda3/bin/python,--conf,spark.pyspark.python=/mnt1/anaconda3/bin/python,--num-executors,64,--conf,spark.executor.memory=4g,#{my_python_script},#{my_s3_input},#{my_s3_out}",
+      "id": "EmrActivityId_bymDF",
+      "runsOn": {
+        "ref": "EmrClusterId_4eDgd"
+      },
+      "type": "EmrActivity",
+      "onSuccess": {
+        "ref": "ActionId_gQQYD"
+      }
+    },
+    {
+      "subnetId": "subnet-052eeecff3f0d0c22",
+      "bootstrapAction": "s3://pk-big-data-assessment/config/emr_conda_setup.sh,#{my_s3_input}",
+      "maximumRetries": "1",
+      "name": "Spark - ETL Activity",
+      "coreInstanceCount": "6",
+      "coreInstanceType": "m5.16xlarge",
+      "id": "EmrClusterId_4eDgd",
+      "releaseLabel": "emr-5.25.0",
+      "masterInstanceType": "m5.16xlarge",
+      "type": "EmrCluster",
+      "terminateAfter": "30 Minutes",
+      "applications": "Spark"
+    },
+    {
+      "failureAndRerunMode": "CASCADE",
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "pipelineLogUri": "s3://pk-big-data-assessment/",
+      "scheduleType": "ONDEMAND",
+      "name": "Default",
+      "id": "Default"
+    },
+    {
+      "role": "DataPipelineDefaultRole",
+      "subject": "EMR Status",
+      "name": "Spark Job notice",
+      "id": "ActionId_gQQYD",
+      "message": "Spark EMR activity is Complete",
+      "type": "SnsAlarm",
+      "topicArn": "arn:aws:sns:us-east-1:775703772184:Spark-EMR-Status"
+    }
+  ],
+  "parameters": [
+    {
+      "default": "s3://pk-big-data-assessment/data-in/sample.txt",
+      "description": "Data Inputlocation",
+      "id": "my_s3_input",
+      "type": "String"
+    },
+    {
+      "description": "Python_script_location",
+      "id": "my_python_script",
+      "type": "String"
+    },
+    {
+      "description": "Save Data to",
+      "id": "my_s3_out",
+      "type": "String"
+    }
+  ],
+  "values": {
+    "my_s3_input": "s3://pk-big-data-assessment/prods_op_mogreps-uk_20160717_03_11_033.nc",
+    "my_s3_out": "s3://pk-big-data-assessment/flatten_cube/2020-5-21/",
+    "my_python_script": "s3://pk-big-data-assessment/python/iris_cube_analysis.py"
+  }
+}
